@@ -1,7 +1,4 @@
-import os
-
-# Generador de Infografía Interactiva Educativa CIBERRAÍCES - Símbolo Cultural Wayúu
-html_code = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -16,7 +13,6 @@ html_code = """<!DOCTYPE html>
       --purple-accent: #6B21A8;
       --orange-accent: #E05638;
       --orange-hover: #C84327;
-      --red-symbol: #A61C1C;
       --text-dark: #2C2C2C;
       --text-muted: #555555;
       --border-color: #D1C7BD;
@@ -94,7 +90,7 @@ html_code = """<!DOCTYPE html>
       margin: 0 auto;
     }
 
-    /* Track de Progreso */
+    /* Barra de Progreso */
     .tracker-bar {
       background: #F3ECE2;
       padding: 10px 24px;
@@ -125,7 +121,7 @@ html_code = """<!DOCTYPE html>
       box-shadow: 0 0 0 3px rgba(224, 86, 56, 0.2);
     }
 
-    /* Grid Layout */
+    /* Layout Principal */
     .infographic-grid {
       display: grid;
       grid-template-columns: 280px 1fr 280px;
@@ -146,7 +142,7 @@ html_code = """<!DOCTYPE html>
       gap: 24px;
     }
 
-    /* Tarjetas de Detalle */
+    /* Tarjetas Interactivas de Detalle */
     .detail-card {
       background: var(--card-bg);
       border: 2px solid var(--border-color);
@@ -198,45 +194,61 @@ html_code = """<!DOCTYPE html>
       line-height: 1.45;
     }
 
-    /* Contenedor del Lienzo Gráfico SVG */
-    .svg-container {
+    /* Contenedor Interactivo con Imagen Original */
+    .symbol-viewport {
+      position: relative;
       width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      max-width: 440px;
+      margin: 0 auto;
       background: #FAF6F0;
       border-radius: 12px;
       padding: 10px;
-      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    svg {
+    .symbol-img {
       width: 100%;
       height: auto;
-      max-width: 460px;
+      display: block;
+      user-select: none;
     }
 
-    /* Efectos de Resaltado SVG */
-    .symbol-part {
-      transition: all 0.3s ease;
+    /* Capa de Superposición SVG para Interacción sobre la Imagen */
+    .overlay-svg {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: calc(100% - 20px);
+      height: calc(100% - 20px);
+      pointer-events: none;
+    }
+
+    .hotspot {
+      fill: transparent;
+      stroke: transparent;
+      stroke-width: 12;
+      pointer-events: auto;
       cursor: pointer;
+      transition: all 0.3s ease;
     }
 
-    .symbol-part:hover {
+    .hotspot:hover {
+      stroke: rgba(224, 86, 56, 0.6);
+      filter: drop-shadow(0 0 6px rgba(224, 86, 56, 0.5));
+    }
+
+    .hotspot.highlighted {
       stroke: var(--orange-accent) !important;
-      filter: drop-shadow(0 0 4px rgba(224, 86, 56, 0.6));
+      stroke-width: 16px !important;
+      filter: drop-shadow(0 0 8px rgba(224, 86, 56, 0.8));
     }
 
-    .highlighted {
-      stroke: var(--orange-accent) !important;
-      stroke-width: 14px !important;
-      filter: drop-shadow(0 0 6px rgba(224, 86, 56, 0.8));
-    }
-
-    /* Popover para Explicaciones sobre el Símbolo */
+    /* Popover para Información */
     .popover-info {
       position: absolute;
-      bottom: 12px;
+      bottom: -15px;
       left: 50%;
       transform: translateX(-50%);
       background: var(--purple-dark);
@@ -245,8 +257,7 @@ html_code = """<!DOCTYPE html>
       border-radius: 8px;
       font-size: 0.85rem;
       text-align: center;
-      width: 90%;
-      max-width: 380px;
+      width: 95%;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       border: 1px solid var(--orange-accent);
       opacity: 0;
@@ -262,7 +273,7 @@ html_code = """<!DOCTYPE html>
 
     /* Sección RECUERDA */
     .remember-section {
-      margin: 0 28px 20px 28px;
+      margin: 10px 28px 20px 28px;
       background: #FDF6EC;
       border: 2px solid #F3D1A0;
       border-radius: 12px;
@@ -315,7 +326,7 @@ html_code = """<!DOCTYPE html>
       max-height: 150px;
     }
 
-    /* Cierre / Evaluación de Reflexión */
+    /* Cierre / Reflexión Pedagógica */
     .closure-section {
       margin: 0 28px 28px 28px;
       background: var(--purple-light);
@@ -444,7 +455,7 @@ html_code = """<!DOCTYPE html>
           <span class="detail-title">DETALLE 1</span>
           <span class="indicator-icon">Explorar</span>
         </div>
-        <p><strong>Curvas y espirales:</strong> Las curvas en espiral se repiten a ambos lados. Son formas orgánicas que aportan movimiento y equilibrio visual.</p>
+        <p><strong>Curvas y espirales:</strong> Las curvas en espiral se repiten a ambos lados. Son formas orgánicas que aportan movimiento y equilibrio.</p>
       </div>
 
       <div class="detail-card" id="card-3" onclick="triggerDetail(3)">
@@ -456,80 +467,34 @@ html_code = """<!DOCTYPE html>
       </div>
     </div>
 
-    <!-- Centro: Símbolo Wayúu y Lupas SVG Fieles al Gráfico Original -->
-    <div class="svg-container">
-      <div class="popover-info" id="popover">Pasa el cursor o haz clic sobre los componentes del símbolo.</div>
+    <!-- Centro: Símbolo Wayúu Fiel 100% Original con Capa Interactiva -->
+    <div class="symbol-viewport">
+      <img src="simbolo_wayuu.png" alt="Símbolo Gráfico Cultural Wayúu" class="symbol-img" id="symbol-image">
+      
+      <svg class="overlay-svg" viewBox="0 0 500 400">
+        <!-- Hotspots/Trazados invisibles superpuestos exactamente al símbolo original -->
+        
+        <!-- Detalle 2: Línea Central -->
+        <line id="hotspot-2" class="hotspot" x1="250" y1="40" x2="250" y2="350" 
+              onmouseenter="hoverPart('Línea Central Vertical: Organiza el símbolo y le da estructura recta.')" 
+              onclick="triggerDetail(2)"/>
 
-      <svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <style>
-            .symbol-line { fill: none; stroke: var(--red-symbol); stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; }
-            .lupa-bg { fill: #FFFFFF; stroke: var(--purple-main); stroke-width: 3; }
-            .guide-line { stroke: var(--purple-accent); stroke-width: 1.5; stroke-dasharray: 3,3; }
-          </style>
-        </defs>
+        <!-- Detalle 1: Curvas Espirales Superiores -->
+        <path id="hotspot-1-izq" class="hotspot" d="M 250,150 C 180,150 100,160 80,210 C 60,260 110,310 150,280 C 180,250 120,200 100,230" 
+              onmouseenter="hoverPart('Curvas Espirales Izquierda: Formas orgánicas que aportan movimiento y equilibrio.')" 
+              onclick="triggerDetail(1)"/>
 
-        <!-- LÍNEAS DE GUÍA A LUPAS -->
-        <line x1="170" y1="120" x2="110" y2="80" class="guide-line" />
-        <line x1="260" y1="110" x2="380" y2="60" class="guide-line" />
-        <line x1="230" y1="210" x2="160" y2="240" class="guide-line" />
-        <line x1="290" y1="210" x2="360" y2="240" class="guide-line" />
+        <path id="hotspot-1-der" class="hotspot" d="M 250,150 C 320,150 400,160 420,210 C 440,260 390,310 350,280 C 320,250 380,200 400,230" 
+              onmouseenter="hoverPart('Curvas Espirales Derecha: Repetición simétrica en espejo.')" 
+              onclick="triggerDetail(1)"/>
 
-        <!-- LUPAS DE DETALLE DE LA IMAGEN ORIGINAL -->
-        <!-- Lupa 1 (Superior Izquierda) -->
-        <g transform="translate(90, 80)">
-          <circle cx="0" cy="0" r="38" class="lupa-bg"/>
-          <path d="M-22,12 C-22,-18 -2,-18 -2,-2 C-2,10 -15,8 -15,0" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
-          <path d="M12,12 C12,-18 -8,-18 -8,-2 C-8,10 5,8 5,0" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
-        </g>
-
-        <!-- Lupa 2 (Superior Derecha - Cruce) -->
-        <g transform="translate(380, 70)">
-          <circle cx="0" cy="0" r="38" class="lupa-bg"/>
-          <line x1="0" y1="-30" x2="0" y2="30" stroke="var(--red-symbol)" stroke-width="7"/>
-          <line x1="-30" y1="0" x2="30" y2="0" stroke="var(--red-symbol)" stroke-width="7"/>
-        </g>
-
-        <!-- Lupa 3 (Inferior Izquierda) -->
-        <g transform="translate(140, 240)">
-          <circle cx="0" cy="0" r="38" class="lupa-bg"/>
-          <line x1="0" y1="-30" x2="0" y2="10" stroke="var(--red-symbol)" stroke-width="7" stroke-linecap="round"/>
-          <path d="M0,10 C-18,10 -22,28 -8,28 C2,28 0,18 0,10" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
-          <path d="M0,10 C18,10 22,28 8,28 C-2,28 0,18 0,10" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
-        </g>
-
-        <!-- Lupa 4 (Inferior Derecha) -->
-        <g transform="translate(360, 240)">
-          <circle cx="0" cy="0" r="38" class="lupa-bg"/>
-          <path d="M-20,10 C-20,-15 0,-15 0,0 C0,12 -12,10 -12,2" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
-          <path d="M10,10 C10,-15 -10,-15 -10,0 C-10,12 2,10 2,2" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
-        </g>
-
-        <!-- SÍMBOLO CENTRAL WAYÚU INTERACTIVO -->
-        <g id="symbol-group">
-          <!-- Detalle 2: Línea Central Vertical -->
-          <line id="part-linea-central" class="symbol-line symbol-part" x1="250" y1="60" x2="250" y2="220" 
-                onmouseenter="hoverPart('Línea Central Vertical: Eje de simetría y estructura principal de la composición.')" 
-                onclick="triggerDetail(2)"/>
-
-          <!-- Detalle 1: Curvas Espirales Superiores Izquierda y Derecha -->
-          <path id="part-curvas-sup-izq" class="symbol-line symbol-part" 
-                d="M250,110 L190,110 C150,110 130,140 150,170 C165,190 185,170 170,150 C160,140 145,150 150,160" 
-                onmouseenter="hoverPart('Espiral Izquierda: Aporta fluidez, dinamismo y equilibrio visual.')" 
-                onclick="triggerDetail(1)"/>
-
-          <path id="part-curvas-sup-der" class="symbol-line symbol-part" 
-                d="M250,110 L310,110 C350,110 370,140 350,170 C335,190 315,170 330,150 C340,140 355,150 350,160" 
-                onmouseenter="hoverPart('Espiral Derecha: Refleja en simetría bilateral el movimiento orgánico.')" 
-                onclick="triggerDetail(1)"/>
-
-          <!-- Detalle 3: Curvas Inferiores -->
-          <path id="part-curvas-inf" class="symbol-line symbol-part" 
-                d="M250,210 C220,210 200,245 220,250 C235,252 240,230 230,220 M250,210 C280,210 300,245 280,250 C265,252 260,230 270,220" 
-                onmouseenter="hoverPart('Curvas Inferiores: Anclaje y estabilidad visual conectadas al eje central.')" 
-                onclick="triggerDetail(3)"/>
-        </g>
+        <!-- Detalle 3: Curvas Inferiores -->
+        <path id="hotspot-3" class="hotspot" d="M 250,330 C 210,330 190,360 210,375 C 230,380 240,350 220,335 M 250,330 C 290,330 310,360 290,375 C 270,380 260,350 280,335" 
+              onmouseenter="hoverPart('Curvas Inferiores: Conexión con el eje central que genera estabilidad.')" 
+              onclick="triggerDetail(3)"/>
       </svg>
+
+      <div class="popover-info" id="popover">Pasa el cursor sobre las zonas del símbolo o selecciona un detalle.</div>
     </div>
 
     <!-- Columna Derecha: Detalle 2 y 4 -->
@@ -566,9 +531,9 @@ html_code = """<!DOCTYPE html>
     </div>
   </div>
 
-  <!-- Interacción de Cierre (Pregunta de Reflexión) -->
+  <!-- Cierre: Evaluación / Pregunta de Reflexión -->
   <div class="closure-section" id="closure-section">
-    <div class="closure-title">🎓 Reflexión Final sobre la Composición Visual</div>
+    <div class="closure-title">🎓 Reflexión Final</div>
     <div class="closure-question">¿Qué relaciones encuentras entre las formas y las líneas del símbolo gráfico cultural Wayúu?</div>
 
     <div class="options-group">
@@ -576,7 +541,7 @@ html_code = """<!DOCTYPE html>
         A. La línea recta vertical proporciona estructura y dirección, mientras que las curvas generan equilibrio dinámico y simetría.
       </button>
       <button class="option-btn" onclick="selectOption(this)">
-        B. Las formas curvas funcionan de manera aislada sin relación organizativa con la recta central.
+        B. Las formas curvas funcionan de manera aislada sin ninguna relación organizativa con la recta central.
       </button>
       <button class="option-btn" onclick="selectOption(this)">
         C. La línea vertical rompe la simetría visual de las espirales laterales.
@@ -585,15 +550,15 @@ html_code = """<!DOCTYPE html>
 
     <div class="textarea-area">
       <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;">
-        Complementa con tu análisis personal (opcional):
+        Escribe brevemente tu respuesta o análisis adicional:
       </label>
-      <textarea placeholder="Escribe aquí tu reflexión sobre el equilibrio entre geometría y formas orgánicas..."></textarea>
+      <textarea placeholder="Analiza cómo se combinan la geometría y las formas orgánicas..."></textarea>
     </div>
 
     <button class="submit-btn" onclick="submitReflection()">Enviar Reflexión</button>
 
     <div class="feedback-box" id="feedback-box">
-      ✓ <strong>Análisis completado:</strong> Has identificado con precisión la interacción entre el eje recto estructural y el dinamismo de las formas orgánicas en el diseño Wayúu.
+      ✓ <strong>Excelente análisis:</strong> Has comprendido cómo la recta central y las espirales se complementan para transmitir estructura e identidad en la gráfica Wayúu.
     </div>
   </div>
 </div>
@@ -601,15 +566,15 @@ html_code = """<!DOCTYPE html>
 <script>
   const explored = { 1: false, 2: false, 3: false, 4: false };
 
-  const partsMap = {
-    1: ['part-curvas-sup-izq', 'part-curvas-sup-der'],
-    2: ['part-linea-central'],
-    3: ['part-curvas-inf'],
-    4: ['part-linea-central', 'part-curvas-sup-izq', 'part-curvas-sup-der', 'part-curvas-inf']
+  const hotspotMap = {
+    1: ['hotspot-1-izq', 'hotspot-1-der'],
+    2: ['hotspot-2'],
+    3: ['hotspot-3'],
+    4: ['hotspot-1-izq', 'hotspot-1-der', 'hotspot-2', 'hotspot-3']
   };
 
-  function clearSVGHighlights() {
-    document.querySelectorAll('.symbol-part').forEach(el => {
+  function clearHighlights() {
+    document.querySelectorAll('.hotspot').forEach(el => {
       el.classList.remove('highlighted');
     });
   }
@@ -618,7 +583,7 @@ html_code = """<!DOCTYPE html>
     explored[detailNum] = true;
     updateTracker();
 
-    // Actualizar tarjetas en UI
+    // Estado visual de las tarjetas
     for (let i = 1; i <= 4; i++) {
       const card = document.getElementById(`card-${i}`);
       if (card) {
@@ -627,20 +592,20 @@ html_code = """<!DOCTYPE html>
       }
     }
 
-    // Resaltar trazados SVG correspondientes
-    clearSVGHighlights();
-    const targetParts = partsMap[detailNum] || [];
-    targetParts.forEach(id => {
+    // Resaltar trazado sobre la imagen original
+    clearHighlights();
+    const targetHotspots = hotspotMap[detailNum] || [];
+    targetHotspots.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.add('highlighted');
     });
 
-    // Mostrar explicación emergente
+    // Mostrar explicación
     const messages = {
-      1: "Detalle 1: Las espirales en repetición generan ritmo y equilibrio visual continuo.",
-      2: "Detalle 2: La línea vertical central actúa como el eje organizador de todo el gráfico.",
-      3: "Detalle 3: Las curvas inferiores anclan la figura aportando estabilidad en la base.",
-      4: "Detalle 4: Sinergia visual entre líneas rectas (estructura) y curvas (fluidez)."
+      1: "Detalle 1: Las espirales orgánicas repitiéndose en ambos lados generan fluidez y equilibrio.",
+      2: "Detalle 2: La línea recta vertical estructura el eje organizador del conjunto gráfico.",
+      3: "Detalle 3: Las curvas inferiores se conectan al eje central aportando anclaje y estabilidad.",
+      4: "Detalle 4: Sinergia total: combinación armónica de líneas rectas (estructura) y curvas (movimiento)."
     };
     showPopover(messages[detailNum]);
   }
@@ -689,11 +654,3 @@ html_code = """<!DOCTYPE html>
 
 </body>
 </html>
-"""
-
-# Guardar en archivo
-filename = "infografia_ciberraices_wayuu.html"
-with open(filename, "w", encoding="utf-8") as f:
-    f.write(html_code)
-
-print(f"Archivo de infografía generado exitosamente: {filename}")
