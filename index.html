@@ -1,0 +1,754 @@
+import os
+
+# Script de Python para generar la infografía interactiva utilizando la imagen fiel 'Simbolo wayuu.jpg'
+html_content = """<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIBERRAÍCES - Infografía Interactiva: Símbolo Cultural Wayúu</title>
+  <style>
+    :root {
+      --bg-color: #fcf8f2;
+      --purple-main: #4a154b;
+      --purple-dark: #320d34;
+      --purple-light: #f3e8f4;
+      --purple-accent: #6b21a8;
+      --orange-accent: #e05638;
+      --orange-hover: #c84327;
+      --red-symbol: #b81d1d;
+      --text-dark: #2c2c2c;
+      --text-muted: #555555;
+      --border-color: #d1c7bd;
+      --card-bg: #ffffff;
+      --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      font-family: var(--font-family);
+      line-height: 1.5;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      max-width: 1100px;
+      width: 100%;
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(74, 21, 75, 0.08);
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--purple-main);
+      color: white;
+      padding: 24px 32px;
+      text-align: center;
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: inline-block;
+      background: var(--purple-dark);
+      padding: 6px 20px;
+      border-radius: 20px;
+    }
+
+    header p {
+      font-size: 1.05rem;
+      color: #e9d5ff;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .brand-tag {
+      position: absolute;
+      top: 20px;
+      left: 24px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      color: var(--orange-accent);
+      background: rgba(255, 255, 255, 0.15);
+      padding: 4px 12px;
+      border-radius: 12px;
+      letter-spacing: 1px;
+    }
+
+    /* Main layout grid */
+    .infographic-body {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr 1fr;
+      grid-gap: 20px;
+      padding: 30px;
+      position: relative;
+    }
+
+    @media (max-width: 900px) {
+      .infographic-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Cards for Details */
+    .detail-card {
+      background: #fff;
+      border: 2px solid #e5e0d8;
+      border-radius: 12px;
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+
+    .detail-card:hover {
+      border-color: var(--orange-accent);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(224, 86, 56, 0.12);
+    }
+
+    .detail-card.active {
+      border-color: var(--purple-main);
+      background: var(--purple-light);
+      box-shadow: 0 6px 16px rgba(74, 21, 75, 0.15);
+    }
+
+    .detail-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .detail-title {
+      font-weight: 700;
+      color: var(--purple-main);
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .interactive-badge {
+      font-size: 0.75rem;
+      background: var(--orange-accent);
+      color: white;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .detail-card p {
+      font-size: 0.95rem;
+      color: var(--text-dark);
+      line-height: 1.4;
+    }
+
+    /* Contenedor de la Imagen con Zonas Interactivas (Hotspots) */
+    .canvas-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: #faf6f0;
+      border-radius: 16px;
+      border: 1px dashed var(--border-color);
+      padding: 20px;
+      min-height: 380px;
+    }
+
+    .image-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      display: inline-block;
+    }
+
+    .symbol-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+      transition: filter 0.3s ease;
+    }
+
+    /* Hotspots interactivos superpuestos sobre la imagen */
+    .hotspot {
+      position: absolute;
+      border-radius: 50%;
+      cursor: pointer;
+      border: 2px dashed transparent;
+      transition: all 0.3s ease;
+      background: rgba(224, 86, 56, 0.05);
+    }
+
+    .hotspot:hover {
+      border-color: var(--orange-accent);
+      background: rgba(224, 86, 56, 0.25);
+      box-shadow: 0 0 12px rgba(224, 86, 56, 0.5);
+    }
+
+    .hotspot.highlighted {
+      border-color: var(--purple-main);
+      background: rgba(74, 21, 75, 0.3);
+      box-shadow: 0 0 16px rgba(74, 21, 75, 0.7);
+    }
+
+    /* Posiciones exactas para la imagen Simbolo wayuu.jpg */
+    #hs-linea-central { top: 0%; left: 45%; width: 10%; height: 85%; border-radius: 8px; }
+    #hs-curvas-sup-izq { top: 25%; left: 0%; width: 45%; height: 50%; }
+    #hs-curvas-sup-der { top: 25%; right: 0%; width: 45%; height: 50%; }
+    #hs-curvas-inferiores { bottom: 5%; left: 28%; width: 44%; height: 35%; }
+
+    /* Center symbol hover instruction */
+    .center-hint {
+      margin-top: 15px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+      background: rgba(255,255,255,0.8);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid var(--border-color);
+    }
+
+    /* Popover/Tooltip para el Símbolo */
+    .info-popover {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(50, 13, 52, 0.95);
+      color: white;
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      max-width: 280px;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: none;
+      z-index: 20;
+      backdrop-filter: blur(4px);
+      border: 1px solid var(--orange-accent);
+    }
+
+    .info-popover.visible {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .info-popover-close {
+      position: absolute;
+      top: 6px;
+      right: 10px;
+      color: #aaa;
+      cursor: pointer;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    .info-popover-close:hover {
+      color: white;
+    }
+
+    /* Section "RECUERDA" */
+    .remember-section {
+      margin: 0 30px 20px 30px;
+      background: #fdf6ec;
+      border: 2px solid #f3d1a0;
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .remember-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      background: #fbf0e0;
+      user-select: none;
+    }
+
+    .remember-header:hover {
+      background: #f7e6ce;
+    }
+
+    .remember-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      color: var(--purple-main);
+      font-size: 1.1rem;
+    }
+
+    .remember-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--purple-main);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    .remember-content {
+      padding: 0 20px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      font-size: 0.95rem;
+      color: var(--text-dark);
+    }
+
+    .remember-section.open .remember-content {
+      padding: 16px 20px 20px 20px;
+      max-height: 200px;
+    }
+
+    .toggle-arrow {
+      transition: transform 0.3s ease;
+      font-size: 0.8rem;
+      color: var(--purple-main);
+    }
+
+    .remember-section.open .toggle-arrow {
+      transform: rotate(180deg);
+    }
+
+    /* Reflection Closure Section */
+    .closure-section {
+      margin: 0 30px 30px 30px;
+      background: var(--purple-light);
+      border: 2px solid var(--purple-accent);
+      border-radius: 12px;
+      padding: 24px;
+      display: none;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .closure-section.active {
+      display: block;
+    }
+
+    .closure-title {
+      font-weight: 700;
+      color: var(--purple-main);
+      margin-bottom: 12px;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .closure-question {
+      font-size: 1.05rem;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+
+    .reflection-options {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .option-btn {
+      background: white;
+      border: 1px solid var(--border-color);
+      padding: 12px 16px;
+      border-radius: 8px;
+      text-align: left;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .option-btn:hover {
+      border-color: var(--orange-accent);
+      background: #fffefb;
+    }
+
+    .option-btn.selected {
+      border-color: var(--purple-main);
+      background: var(--purple-main);
+      color: white;
+    }
+
+    .custom-response-area {
+      margin-top: 10px;
+    }
+
+    .custom-response-area textarea {
+      width: 100%;
+      height: 80px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      font-family: inherit;
+      font-size: 0.95rem;
+      resize: vertical;
+    }
+
+    .submit-btn {
+      margin-top: 12px;
+      background: var(--orange-accent);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .submit-btn:hover {
+      background: var(--orange-hover);
+    }
+
+    .feedback-message {
+      margin-top: 12px;
+      padding: 12px;
+      background: #e6f4ea;
+      border: 1px solid #34a853;
+      border-radius: 8px;
+      color: #137333;
+      font-weight: 500;
+      display: none;
+    }
+
+    /* Progress tracker */
+    .tracker {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .tracker-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #ddd;
+      transition: background 0.3s ease;
+    }
+
+    .tracker-dot.completed {
+      background: var(--orange-accent);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="brand-tag">CIBERRAÍCES</div>
+    <h1>OBSERVA DE CERCA</h1>
+    <p>Símbolo gráfico cultural Wayúu. Haz clic en las zonas o en los detalles interactivos para analizar cómo sus formas y líneas construyen un conjunto armónico.</p>
+  </header>
+
+  <div class="tracker">
+    <span>Exploración de detalles:</span>
+    <div class="tracker-dot" id="dot-1" title="Detalle 1"></div>
+    <div class="tracker-dot" id="dot-2" title="Detalle 2"></div>
+    <div class="tracker-dot" id="dot-3" title="Detalle 3"></div>
+    <div class="tracker-dot" id="dot-4" title="Detalle 4"></div>
+    <span id="tracker-text">(0/4 explorados)</span>
+  </div>
+
+  <div class="infographic-body">
+    <!-- Columna Izquierda: Detalles 1 y 3 -->
+    <div class="column">
+      <div class="detail-card" id="card-1" onclick="selectDetail(1)">
+        <div class="detail-card-header">
+          <span class="detail-title">DETALLE 1</span>
+          <span class="interactive-badge">👆 Haz clic</span>
+        </div>
+        <p><strong>Curvas y espirales:</strong> Las curvas en espiral se repiten a ambos lados. Son formas orgánicas que aportan movimiento y equilibrio visual.</p>
+      </div>
+
+      <div class="detail-card" id="card-3" onclick="selectDetail(3)">
+        <div class="detail-card-header">
+          <span class="detail-title">DETALLE 3</span>
+          <span class="interactive-badge">👆 Haz clic</span>
+        </div>
+        <p><strong>Curvas inferiores:</strong> Las curvas inferiores se conectan con la línea central, generando simetría y estabilidad visual.</p>
+      </div>
+    </div>
+
+    <!-- Centro: Símbolo con Imagen Real e Interacción Hotspot -->
+    <div class="canvas-container">
+      <div class="info-popover" id="popover">
+        <span class="info-popover-close" onclick="closePopover()">×</span>
+        <div id="popover-text">Símbolo Wayúu: Estructura geométrica y orgánica que conecta el eje vertical con formas dinámicas.</div>
+      </div>
+
+      <div class="image-wrapper" onclick="onSymbolClick(event)">
+        <!-- Imagen original de la cultura Wayúu -->
+        <img src="Simbolo wayuu.jpg" alt="Símbolo gráfico cultural Wayúu" class="symbol-img">
+
+        <!-- Capas interactivas (Hotspots) alineadas con la figura original -->
+        <div class="hotspot" id="hs-linea-central"
+             onmouseenter="hoverPart('Línea Central Vertical: Eje de simetría y estructura principal.')" 
+             onmouseleave="clearHover()"></div>
+
+        <div class="hotspot" id="hs-curvas-sup-izq"
+             onmouseenter="hoverPart('Espiral Superior Izquierda: Simetría bilateral en las curvas.')" 
+             onmouseleave="clearHover()"></div>
+
+        <div class="hotspot" id="hs-curvas-sup-der"
+             onmouseenter="hoverPart('Espiral Superior Derecha: Movimiento orgánico y fluidez.')" 
+             onmouseleave="clearHover()"></div>
+
+        <div class="hotspot" id="hs-curvas-inferiores"
+             onmouseenter="hoverPart('Curvas Inferiores: Anclaje y estabilidad a la base del diseño.')" 
+             onmouseleave="clearHover()"></div>
+      </div>
+
+      <div class="center-hint">💡 Pasa el cursor o haz clic en las zonas del símbolo central para explorar la relación entre formas y líneas.</div>
+    </div>
+
+    <!-- Columna Derecha: Detalles 2 y 4 -->
+    <div class="column">
+      <div class="detail-card" id="card-2" onclick="selectDetail(2)">
+        <div class="detail-card-header">
+          <span class="detail-title">DETALLE 2</span>
+          <span class="interactive-badge">👆 Haz clic</span>
+        </div>
+        <p><strong>Línea central:</strong> La línea vertical central organiza el símbolo y le da dirección. Es una línea recta que estructura el conjunto.</p>
+      </div>
+
+      <div class="detail-card" id="card-4" onclick="selectDetail(4)">
+        <div class="detail-card-header">
+          <span class="detail-title">DETALLE 4</span>
+          <span class="interactive-badge">👆 Haz clic</span>
+        </div>
+        <p><strong>Relación entre formas:</strong> Las formas se combinan: líneas rectas y curvas trabajan juntas para crear un diseño armónico y equilibrado.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sección RECUERDA -->
+  <div class="remember-section" id="remember-box">
+    <div class="remember-header" onclick="toggleRemember()">
+      <div class="remember-title">
+        <div class="remember-icon">🔍</div>
+        <span>RECUERDA</span>
+      </div>
+      <span class="toggle-arrow">▼</span>
+    </div>
+    <div class="remember-content">
+      <p>Las formas y las líneas no están allí por casualidad. Su combinación transmite ideas, expresa identidad y cuenta historias desde la cosmovisión y cultura Wayúu.</p>
+    </div>
+  </div>
+
+  <!-- Sección Interacción de Cierre (Cuestionario/Reflexión) -->
+  <div class="closure-section" id="closure-section">
+    <div class="closure-title">
+      <span>🎓</span>
+      <span>Reflexión Final: Integración Visual</span>
+    </div>
+    <div class="closure-question">
+      ¿Qué relaciones encuentras entre las formas y las líneas del símbolo gráfico cultural Wayúu?
+    </div>
+
+    <div class="reflection-options">
+      <button class="option-btn" onclick="selectOption(this)">
+        A. La línea recta vertical aporta firmeza y estructura, mientras las curvas generan movimiento y armonía en equilibrio.
+      </button>
+      <button class="option-btn" onclick="selectOption(this)">
+        B. Las curvas son independientes de la línea central y no influyen en el equilibrio visual del diseño.
+      </button>
+      <button class="option-btn" onclick="selectOption(this)">
+        C. La recta central divide el gráfico de forma asimétrica para resaltar solo el lado izquierdo.
+      </button>
+    </div>
+
+    <div class="custom-response-area">
+      <label for="student-text" style="font-size:0.9rem; font-weight:600; display:block; margin-bottom:6px;">
+        Escribe una breve reflexión personal complementaria:
+      </label>
+      <textarea id="student-text" placeholder="Escribe aquí tu análisis sobre la combinación de formas geométricas y orgánicas..."></textarea>
+    </div>
+
+    <button class="submit-btn" onclick="submitReflection()">Enviar Reflexión</button>
+    <div class="feedback-message" id="feedback-msg">
+      ✓ ¡Excelente análisis! Has identificado con éxito cómo el eje rígido y las formas fluidas interactúan para proyectar unidad visual e identidad cultural.
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tracking explored details
+  const explored = { 1: false, 2: false, 3: false, 4: false };
+
+  const allHotspots = [
+    'hs-linea-central',
+    'hs-curvas-sup-izq',
+    'hs-curvas-sup-der',
+    'hs-curvas-inferiores'
+  ];
+
+  function clearHighlights() {
+    allHotspots.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('highlighted');
+    });
+  }
+
+  function highlightParts(ids) {
+    clearHighlights();
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('highlighted');
+    });
+  }
+
+  function selectDetail(detailNum) {
+    // Mark detail as explored
+    explored[detailNum] = true;
+    updateTracker();
+
+    // UI card highlight
+    for (let i = 1; i <= 4; i++) {
+      const card = document.getElementById(`card-${i}`);
+      if (card) {
+        if (i === detailNum) {
+          card.classList.add('active');
+        } else {
+          card.classList.remove('active');
+        }
+      }
+    }
+
+    // Image hotspot visual highlight mapping
+    if (detailNum === 1) {
+      // Detalle 1: Curvas y espirales superiores
+      highlightParts(['hs-curvas-sup-izq', 'hs-curvas-sup-der']);
+      showPopover("Detalle 1: Las curvas en espiral repetidas aportan movimiento y ritmo al diseño.");
+    } else if (detailNum === 2) {
+      // Detalle 2: Línea central
+      highlightParts(['hs-linea-central']);
+      showPopover("Detalle 2: La línea recta vertical actúa como columna vertebral de toda la composición.");
+    } else if (detailNum === 3) {
+      // Detalle 3: Curvas inferiores
+      highlightParts(['hs-curvas-inferiores']);
+      showPopover("Detalle 3: Las curvas inferiores anclan el símbolo a la base, proporcionando estabilidad.");
+    } else if (detailNum === 4) {
+      // Detalle 4: Relación entre formas (Rectas + Curvas)
+      highlightParts(allHotspots);
+      showPopover("Detalle 4: Sinergia total. Las rectas y las curvas interactúan para crear un todo armónico.");
+    }
+  }
+
+  function hoverPart(text) {
+    const popover = document.getElementById('popover');
+    const popText = document.getElementById('popover-text');
+    popText.innerText = text;
+    popover.classList.add('visible');
+  }
+
+  function clearHover() {
+    // Mantener la visualización fluida
+  }
+
+  function onSymbolClick(event) {
+    showPopover("Relación de formas: La interacción de líneas rectas (estructura) y líneas curvas (dinamismo) sintetiza la cosmovisión Wayúu.");
+  }
+
+  function showPopover(text) {
+    const popover = document.getElementById('popover');
+    const popText = document.getElementById('popover-text');
+    popText.innerText = text;
+    popover.classList.add('visible');
+  }
+
+  function closePopover() {
+    document.getElementById('popover').classList.remove('visible');
+  }
+
+  function toggleRemember() {
+    const rememberBox = document.getElementById('remember-box');
+    rememberBox.classList.toggle('open');
+  }
+
+  function updateTracker() {
+    let count = 0;
+    for (let i = 1; i <= 4; i++) {
+      if (explored[i]) {
+        count++;
+        document.getElementById(`dot-${i}`).classList.add('completed');
+      }
+    }
+    document.getElementById('tracker-text').innerText = `(${count}/4 explorados)`;
+
+    if (count === 4) {
+      document.getElementById('closure-section').classList.add('active');
+    }
+  }
+
+  function selectOption(btn) {
+    const options = document.querySelectorAll('.option-btn');
+    options.forEach(opt => opt.classList.remove('selected'));
+    btn.classList.add('selected');
+  }
+
+  function submitReflection() {
+    const feedback = document.getElementById('feedback-msg');
+    feedback.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
+"""
+
+# Guardar el archivo HTML resultante
+output_html_path = "infografia_interactiva_wayuu.html"
+with open(output_html_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
+
+print(f"Interactive Infographic HTML saved to {output_html_path}")
