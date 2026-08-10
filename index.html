@@ -1,11 +1,35 @@
-<!DOCTYPE html>
+import base64
+import os
+
+# Nombre de tu archivo de imagen local (asegúrate de que esté en la misma carpeta al ejecutar el script)
+INPUT_IMAGE_PATH = "Simbolo wayuu_2.png"
+
+# Si no existe con ese nombre exacto, intenta buscar la imagen aislada
+if not os.path.exists(INPUT_IMAGE_PATH):
+    # Buscar cualquier PNG en el directorio que contenga "wayuu" o "Simbolo"
+    files = [f for f in os.listdir('.') if f.endswith('.png')]
+    if files:
+        INPUT_IMAGE_PATH = files[0]
+
+# Convertir la imagen a Base64 para embeberla
+base64_image = ""
+if os.path.exists(INPUT_IMAGE_PATH):
+    with open(INPUT_IMAGE_PATH, "rb") as img_file:
+        base64_image = base64.b64encode(img_file.read()).decode('utf-8')
+    image_src = f"data:image/png;base64,{base64_image}"
+else:
+    # Fallback por si ejecutas el script sin el archivo local
+    image_src = ""
+
+# Estructura HTML Standalone y Autocontenida
+html_code = f"""<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CIBERRAÍCES - Observa de Cerca: Símbolo Cultural Wayúu</title>
   <style>
-    :root {
+    :root {{
       --bg-color: #FAF6F0;
       --purple-main: #4A154B;
       --purple-dark: #320D34;
@@ -18,15 +42,15 @@
       --border-color: #D1C7BD;
       --card-bg: #FFFFFF;
       --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }
+    }}
 
-    * {
+    * {{
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }
+    }}
 
-    body {
+    body {{
       background-color: var(--bg-color);
       color: var(--text-dark);
       font-family: var(--font-family);
@@ -36,9 +60,9 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-    }
+    }}
 
-    .container {
+    .container {{
       max-width: 1100px;
       width: 100%;
       background: var(--card-bg);
@@ -48,17 +72,17 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-    }
+    }}
 
-    header {
+    header {{
       background: var(--purple-main);
       color: white;
       padding: 24px 32px;
       text-align: center;
       position: relative;
-    }
+    }}
 
-    .brand-tag {
+    .brand-tag {{
       position: absolute;
       top: 18px;
       left: 24px;
@@ -69,9 +93,9 @@
       padding: 4px 12px;
       border-radius: 12px;
       letter-spacing: 1px;
-    }
+    }}
 
-    header h1 {
+    header h1 {{
       font-size: 1.8rem;
       font-weight: 700;
       letter-spacing: 1.5px;
@@ -81,17 +105,16 @@
       background: var(--purple-dark);
       padding: 6px 24px;
       border-radius: 20px;
-    }
+    }}
 
-    header p {
+    header p {{
       font-size: 1.05rem;
       color: #E9D5FF;
       max-width: 800px;
       margin: 0 auto;
-    }
+    }}
 
-    /* Barra de Progreso */
-    .tracker-bar {
+    .tracker-bar {{
       background: #F3ECE2;
       padding: 10px 24px;
       display: flex;
@@ -100,50 +123,48 @@
       border-bottom: 1px solid var(--border-color);
       font-size: 0.9rem;
       color: var(--text-muted);
-    }
+    }}
 
-    .tracker-dots {
+    .tracker-dots {{
       display: flex;
       align-items: center;
       gap: 12px;
-    }
+    }}
 
-    .dot {
+    .dot {{
       width: 12px;
       height: 12px;
       border-radius: 50%;
       background: #CBD5E1;
       transition: background 0.3s ease;
-    }
+    }}
 
-    .dot.active {
+    .dot.active {{
       background: var(--orange-accent);
       box-shadow: 0 0 0 3px rgba(224, 86, 56, 0.2);
-    }
+    }}
 
-    /* Layout Principal */
-    .infographic-grid {
+    .infographic-grid {{
       display: grid;
       grid-template-columns: 280px 1fr 280px;
       gap: 20px;
       padding: 28px;
       align-items: center;
-    }
+    }}
 
-    @media (max-width: 950px) {
-      .infographic-grid {
+    @media (max-width: 950px) {{
+      .infographic-grid {{
         grid-template-columns: 1fr;
-      }
-    }
+      }}
+    }}
 
-    .column {
+    .column {{
       display: flex;
       flex-direction: column;
       gap: 24px;
-    }
+    }}
 
-    /* Tarjetas Interactivas de Detalle */
-    .detail-card {
+    .detail-card {{
       background: var(--card-bg);
       border: 2px solid var(--border-color);
       border-radius: 12px;
@@ -151,51 +172,50 @@
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
-    }
+    }}
 
-    .detail-card:hover {
+    .detail-card:hover {{
       border-color: var(--orange-accent);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(224, 86, 56, 0.12);
-    }
+    }}
 
-    .detail-card.active {
+    .detail-card.active {{
       border-color: var(--purple-main);
       background: var(--purple-light);
       box-shadow: 0 6px 18px rgba(74, 21, 75, 0.15);
-    }
+    }}
 
-    .detail-card-header {
+    .detail-card-header {{
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 8px;
-    }
+    }}
 
-    .detail-title {
+    .detail-title {{
       font-weight: 700;
       color: var(--purple-main);
       font-size: 1rem;
       letter-spacing: 0.5px;
-    }
+    }}
 
-    .indicator-icon {
+    .indicator-icon {{
       font-size: 0.75rem;
       background: var(--orange-accent);
       color: white;
       padding: 2px 8px;
       border-radius: 10px;
       font-weight: 600;
-    }
+    }}
 
-    .detail-card p {
+    .detail-card p {{
       font-size: 0.92rem;
       color: var(--text-dark);
       line-height: 1.45;
-    }
+    }}
 
-    /* Contenedor Interactivo con Imagen Original */
-    .symbol-viewport {
+    .symbol-viewport {{
       position: relative;
       width: 100%;
       max-width: 440px;
@@ -206,47 +226,46 @@
       display: flex;
       justify-content: center;
       align-items: center;
-    }
+    }}
 
-    .symbol-img {
+    .symbol-img {{
       width: 100%;
       height: auto;
       display: block;
       user-select: none;
-    }
+    }}
 
-    /* Capa de Superposición SVG para Interacción sobre la Imagen */
-    .overlay-svg {
+    .overlay-svg {{
       position: absolute;
       top: 10px;
       left: 10px;
       width: calc(100% - 20px);
       height: calc(100% - 20px);
       pointer-events: none;
-    }
+    }}
 
-    .hotspot {
+    .hotspot {{
       fill: transparent;
       stroke: transparent;
-      stroke-width: 12;
+      stroke-width: 14;
+      stroke-linecap: round;
       pointer-events: auto;
       cursor: pointer;
       transition: all 0.3s ease;
-    }
+    }}
 
-    .hotspot:hover {
-      stroke: rgba(224, 86, 56, 0.6);
-      filter: drop-shadow(0 0 6px rgba(224, 86, 56, 0.5));
-    }
+    .hotspot:hover {{
+      stroke: rgba(224, 86, 56, 0.5);
+      filter: drop-shadow(0 0 6px rgba(224, 86, 56, 0.6));
+    }}
 
-    .hotspot.highlighted {
+    .hotspot.highlighted {{
       stroke: var(--orange-accent) !important;
       stroke-width: 16px !important;
-      filter: drop-shadow(0 0 8px rgba(224, 86, 56, 0.8));
-    }
+      filter: drop-shadow(0 0 10px rgba(224, 86, 56, 0.9));
+    }}
 
-    /* Popover para Información */
-    .popover-info {
+    .popover-info {{
       position: absolute;
       bottom: -15px;
       left: 50%;
@@ -264,23 +283,22 @@
       visibility: hidden;
       transition: opacity 0.3s ease, visibility 0.3s ease;
       z-index: 10;
-    }
+    }}
 
-    .popover-info.visible {
+    .popover-info.visible {{
       opacity: 1;
       visibility: visible;
-    }
+    }}
 
-    /* Sección RECUERDA */
-    .remember-section {
+    .remember-section {{
       margin: 10px 28px 20px 28px;
       background: #FDF6EC;
       border: 2px solid #F3D1A0;
       border-radius: 12px;
       overflow: hidden;
-    }
+    }}
 
-    .remember-header {
+    .remember-header {{
       padding: 16px 20px;
       display: flex;
       align-items: center;
@@ -288,18 +306,18 @@
       cursor: pointer;
       background: #FBF0E0;
       user-select: none;
-    }
+    }}
 
-    .remember-title {
+    .remember-title {{
       display: flex;
       align-items: center;
       gap: 12px;
       font-weight: 700;
       color: var(--purple-main);
       font-size: 1.05rem;
-    }
+    }}
 
-    .remember-badge {
+    .remember-badge {{
       width: 26px;
       height: 26px;
       background: var(--purple-main);
@@ -310,24 +328,23 @@
       justify-content: center;
       font-weight: bold;
       font-size: 0.85rem;
-    }
+    }}
 
-    .remember-content {
+    .remember-content {{
       padding: 0 20px;
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.4s ease, padding 0.4s ease;
       font-size: 0.95rem;
       color: var(--text-dark);
-    }
+    }}
 
-    .remember-section.open .remember-content {
+    .remember-section.open .remember-content {{
       padding: 16px 20px;
       max-height: 150px;
-    }
+    }}
 
-    /* Cierre / Reflexión Pedagógica */
-    .closure-section {
+    .closure-section {{
       margin: 0 28px 28px 28px;
       background: var(--purple-light);
       border: 2px solid var(--purple-accent);
@@ -335,33 +352,33 @@
       padding: 24px;
       display: none;
       animation: fadeIn 0.4s ease;
-    }
+    }}
 
-    .closure-section.active {
+    .closure-section.active {{
       display: block;
-    }
+    }}
 
-    .closure-title {
+    .closure-title {{
       font-weight: 700;
       color: var(--purple-main);
       margin-bottom: 8px;
       font-size: 1.1rem;
-    }
+    }}
 
-    .closure-question {
+    .closure-question {{
       font-size: 0.98rem;
       margin-bottom: 14px;
       font-weight: 600;
-    }
+    }}
 
-    .options-group {
+    .options-group {{
       display: flex;
       flex-direction: column;
       gap: 8px;
       margin-bottom: 16px;
-    }
+    }}
 
-    .option-btn {
+    .option-btn {{
       background: white;
       border: 1px solid var(--border-color);
       padding: 12px 16px;
@@ -370,20 +387,20 @@
       cursor: pointer;
       font-size: 0.92rem;
       transition: all 0.2s ease;
-    }
+    }}
 
-    .option-btn:hover {
+    .option-btn:hover {{
       border-color: var(--orange-accent);
       background: #FFFEFB;
-    }
+    }}
 
-    .option-btn.selected {
+    .option-btn.selected {{
       border-color: var(--purple-main);
       background: var(--purple-main);
       color: white;
-    }
+    }}
 
-    .textarea-area textarea {
+    .textarea-area textarea {{
       width: 100%;
       height: 70px;
       padding: 10px;
@@ -392,9 +409,9 @@
       font-family: inherit;
       font-size: 0.9rem;
       resize: vertical;
-    }
+    }}
 
-    .submit-btn {
+    .submit-btn {{
       margin-top: 12px;
       background: var(--orange-accent);
       color: white;
@@ -404,13 +421,13 @@
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s ease;
-    }
+    }}
 
-    .submit-btn:hover {
+    .submit-btn:hover {{
       background: var(--orange-hover);
-    }
+    }}
 
-    .feedback-box {
+    .feedback-box {{
       margin-top: 12px;
       padding: 12px;
       background: #E6F4EA;
@@ -419,12 +436,12 @@
       color: #137333;
       font-size: 0.9rem;
       display: none;
-    }
+    }}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+    @keyframes fadeIn {{
+      from {{ opacity: 0; transform: translateY(6px); }}
+      to {{ opacity: 1; transform: translateY(0); }}
+    }}
   </style>
 </head>
 <body>
@@ -467,34 +484,32 @@
       </div>
     </div>
 
-    <!-- Centro: Símbolo Wayúu Fiel 100% Original con Capa Interactiva -->
+    <!-- Centro: Símbolo Wayúu Embebido en Base64 (100% Autocontenido) -->
     <div class="symbol-viewport">
-      <img src="simbolo_wayuu.png" alt="Símbolo Gráfico Cultural Wayúu" class="symbol-img" id="symbol-image">
+      <img src="{image_src}" alt="Símbolo Gráfico Cultural Wayúu" class="symbol-img" id="symbol-image">
       
       <svg class="overlay-svg" viewBox="0 0 500 400">
-        <!-- Hotspots/Trazados invisibles superpuestos exactamente al símbolo original -->
-        
-        <!-- Detalle 2: Línea Central -->
-        <line id="hotspot-2" class="hotspot" x1="250" y1="40" x2="250" y2="350" 
-              onmouseenter="hoverPart('Línea Central Vertical: Organiza el símbolo y le da estructura recta.')" 
+        <!-- Detalle 2: Línea Central Vertical -->
+        <line id="hotspot-2" class="hotspot" x1="250" y1="30" x2="250" y2="355" 
+              onmouseenter="hoverPart('Línea Central Vertical: Organiza el símbolo y le da dirección.')" 
               onclick="triggerDetail(2)"/>
 
         <!-- Detalle 1: Curvas Espirales Superiores -->
-        <path id="hotspot-1-izq" class="hotspot" d="M 250,150 C 180,150 100,160 80,210 C 60,260 110,310 150,280 C 180,250 120,200 100,230" 
-              onmouseenter="hoverPart('Curvas Espirales Izquierda: Formas orgánicas que aportan movimiento y equilibrio.')" 
+        <path id="hotspot-1-izq" class="hotspot" d="M 250,135 C 180,135 70,145 65,200 C 60,265 110,290 140,260 C 160,240 125,200 100,225" 
+              onmouseenter="hoverPart('Curvas Espirales Izquierda: Formas orgánicas que aportan movimiento.')" 
               onclick="triggerDetail(1)"/>
 
-        <path id="hotspot-1-der" class="hotspot" d="M 250,150 C 320,150 400,160 420,210 C 440,260 390,310 350,280 C 320,250 380,200 400,230" 
-              onmouseenter="hoverPart('Curvas Espirales Derecha: Repetición simétrica en espejo.')" 
+        <path id="hotspot-1-der" class="hotspot" d="M 250,135 C 320,135 430,145 435,200 C 440,265 390,290 360,260 C 340,240 375,200 400,225" 
+              onmouseenter="hoverPart('Curvas Espirales Derecha: Repetición simétrica que equilibra el conjunto.')" 
               onclick="triggerDetail(1)"/>
 
         <!-- Detalle 3: Curvas Inferiores -->
-        <path id="hotspot-3" class="hotspot" d="M 250,330 C 210,330 190,360 210,375 C 230,380 240,350 220,335 M 250,330 C 290,330 310,360 290,375 C 270,380 260,350 280,335" 
+        <path id="hotspot-3" class="hotspot" d="M 250,335 C 210,335 185,365 205,380 C 225,385 240,355 220,338 M 250,335 C 290,335 315,365 295,380 C 275,385 260,355 280,338" 
               onmouseenter="hoverPart('Curvas Inferiores: Conexión con el eje central que genera estabilidad.')" 
               onclick="triggerDetail(3)"/>
       </svg>
 
-      <div class="popover-info" id="popover">Pasa el cursor sobre las zonas del símbolo o selecciona un detalle.</div>
+      <div class="popover-info" id="popover">Pasa el cursor sobre el símbolo o selecciona un detalle.</div>
     </div>
 
     <!-- Columna Derecha: Detalle 2 y 4 -->
@@ -531,7 +546,7 @@
     </div>
   </div>
 
-  <!-- Cierre: Evaluación / Pregunta de Reflexión -->
+  <!-- Interacción de Cierre -->
   <div class="closure-section" id="closure-section">
     <div class="closure-title">🎓 Reflexión Final</div>
     <div class="closure-question">¿Qué relaciones encuentras entre las formas y las líneas del símbolo gráfico cultural Wayúu?</div>
@@ -552,105 +567,109 @@
       <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;">
         Escribe brevemente tu respuesta o análisis adicional:
       </label>
-      <textarea placeholder="Analiza cómo se combinan la geometría y las formas orgánicas..."></textarea>
+      <textarea placeholder="Analiza cómo interactúan el eje vertical y las formas orgánicas..."></textarea>
     </div>
 
     <button class="submit-btn" onclick="submitReflection()">Enviar Reflexión</button>
 
     <div class="feedback-box" id="feedback-box">
-      ✓ <strong>Excelente análisis:</strong> Has comprendido cómo la recta central y las espirales se complementan para transmitir estructura e identidad en la gráfica Wayúu.
+      ✓ <strong>Análisis registrado:</strong> Has comprendido la función estructural del eje recto en combinación con el ritmo orgánico de las curvas Wayúu.
     </div>
   </div>
 </div>
 
 <script>
-  const explored = { 1: false, 2: false, 3: false, 4: false };
+  const explored = {{ 1: false, 2: false, 3: false, 4: false }};
 
-  const hotspotMap = {
+  const hotspotMap = {{
     1: ['hotspot-1-izq', 'hotspot-1-der'],
     2: ['hotspot-2'],
     3: ['hotspot-3'],
     4: ['hotspot-1-izq', 'hotspot-1-der', 'hotspot-2', 'hotspot-3']
-  };
+  }};
 
-  function clearHighlights() {
-    document.querySelectorAll('.hotspot').forEach(el => {
+  function clearHighlights() {{
+    document.querySelectorAll('.hotspot').forEach(el => {{
       el.classList.remove('highlighted');
-    });
-  }
+    }});
+  }}
 
-  function triggerDetail(detailNum) {
+  function triggerDetail(detailNum) {{
     explored[detailNum] = true;
     updateTracker();
 
-    // Estado visual de las tarjetas
-    for (let i = 1; i <= 4; i++) {
-      const card = document.getElementById(`card-${i}`);
-      if (card) {
+    for (let i = 1; i <= 4; i++) {{
+      const card = document.getElementById(`card-${{i}}`);
+      if (card) {{
         if (i === detailNum) card.classList.add('active');
         else card.classList.remove('active');
-      }
-    }
+      }}
+    }}
 
-    // Resaltar trazado sobre la imagen original
     clearHighlights();
     const targetHotspots = hotspotMap[detailNum] || [];
-    targetHotspots.forEach(id => {
+    targetHotspots.forEach(id => {{
       const el = document.getElementById(id);
       if (el) el.classList.add('highlighted');
-    });
+    }});
 
-    // Mostrar explicación
-    const messages = {
-      1: "Detalle 1: Las espirales orgánicas repitiéndose en ambos lados generan fluidez y equilibrio.",
-      2: "Detalle 2: La línea recta vertical estructura el eje organizador del conjunto gráfico.",
-      3: "Detalle 3: Las curvas inferiores se conectan al eje central aportando anclaje y estabilidad.",
-      4: "Detalle 4: Sinergia total: combinación armónica de líneas rectas (estructura) y curvas (movimiento)."
-    };
+    const messages = {{
+      1: "Detalle 1: Las espirales orgánicas repitiéndose a ambos lados aportan movimiento y equilibrio.",
+      2: "Detalle 2: La línea vertical central estructura el eje organizador de la figura.",
+      3: "Detalle 3: Las curvas inferiores se conectan al eje central ofreciendo simetría y estabilidad.",
+      4: "Detalle 4: Sinergia visual: líneas rectas y curvas trabajan juntas creando armonía."
+    }};
     showPopover(messages[detailNum]);
-  }
+  }}
 
-  function hoverPart(text) {
+  function hoverPart(text) {{
     showPopover(text);
-  }
+  }}
 
-  function showPopover(text) {
+  function showPopover(text) {{
     const pop = document.getElementById('popover');
     pop.innerText = text;
     pop.classList.add('visible');
-  }
+  }}
 
-  function toggleRemember() {
+  function toggleRemember() {{
     const box = document.getElementById('remember-box');
     const arrow = document.getElementById('remember-arrow');
     box.classList.toggle('open');
     arrow.innerText = box.classList.contains('open') ? '▲' : '▼';
-  }
+  }}
 
-  function updateTracker() {
+  function updateTracker() {{
     let count = 0;
-    for (let i = 1; i <= 4; i++) {
-      if (explored[i]) {
+    for (let i = 1; i <= 4; i++) {{
+      if (explored[i]) {{
         count++;
-        document.getElementById(`dot-${i}`).classList.add('active');
-      }
-    }
-    document.getElementById('tracker-count').innerText = `${count} / 4`;
+        document.getElementById(`dot-${{i}}`).classList.add('active');
+      }}
+    }}
+    document.getElementById('tracker-count').innerText = `${{count}} / 4`;
 
-    if (count === 4) {
+    if (count === 4) {{
       document.getElementById('closure-section').classList.add('active');
-    }
-  }
+    }}
+  }}
 
-  function selectOption(btn) {
+  function selectOption(btn) {{
     document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-  }
+  }}
 
-  function submitReflection() {
+  function submitReflection() {{
     document.getElementById('feedback-box').style.display = 'block';
-  }
+  }}
 </script>
 
 </body>
 </html>
+"""
+
+output_filename = "infografia_ciberraices_wayuu.html"
+with open(output_filename, "w", encoding="utf-8") as f:
+    f.write(html_code)
+
+print(f"¡Éxito! Archivo único autocontenido generado: {output_filename}")
