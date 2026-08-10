@@ -1,44 +1,48 @@
-<!DOCTYPE html>
+import os
+
+# Generador de Infografía Interactiva Educativa CIBERRAÍCES - Símbolo Cultural Wayúu
+html_code = """<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CIBERRAÍCES - Infografía Interactiva: Símbolo Cultural Wayúu</title>
+  <title>CIBERRAÍCES - Observa de Cerca: Símbolo Cultural Wayúu</title>
   <style>
-    :root {{
-      --bg-color: #fcf8f2;
-      --purple-main: #4a154b;
-      --purple-dark: #320d34;
-      --purple-light: #f3e8f4;
-      --purple-accent: #6b21a8;
-      --orange-accent: #e05638;
-      --orange-hover: #c84327;
-      --text-dark: #2c2c2c;
+    :root {
+      --bg-color: #FAF6F0;
+      --purple-main: #4A154B;
+      --purple-dark: #320D34;
+      --purple-light: #F3E8F4;
+      --purple-accent: #6B21A8;
+      --orange-accent: #E05638;
+      --orange-hover: #C84327;
+      --red-symbol: #A61C1C;
+      --text-dark: #2C2C2C;
       --text-muted: #555555;
-      --border-color: #d1c7bd;
-      --card-bg: #ffffff;
+      --border-color: #D1C7BD;
+      --card-bg: #FFFFFF;
       --font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    }}
+    }
 
-    * {{
+    * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-    }}
+    }
 
-    body {{
+    body {
       background-color: var(--bg-color);
       color: var(--text-dark);
       font-family: var(--font-family);
       line-height: 1.5;
-      padding: 20px;
+      padding: 24px 16px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-    }}
+    }
 
-    .container {{
+    .container {
       max-width: 1100px;
       width: 100%;
       background: var(--card-bg);
@@ -48,248 +52,245 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-    }}
+    }
 
-    header {{
+    header {
       background: var(--purple-main);
       color: white;
       padding: 24px 32px;
       text-align: center;
       position: relative;
-    }}
+    }
 
-    header h1 {{
+    .brand-tag {
+      position: absolute;
+      top: 18px;
+      left: 24px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #FFFFFF;
+      background: var(--orange-accent);
+      padding: 4px 12px;
+      border-radius: 12px;
+      letter-spacing: 1px;
+    }
+
+    header h1 {
       font-size: 1.8rem;
       font-weight: 700;
-      letter-spacing: 1px;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       margin-bottom: 8px;
       display: inline-block;
       background: var(--purple-dark);
-      padding: 6px 20px;
+      padding: 6px 24px;
       border-radius: 20px;
-    }}
+    }
 
-    header p {{
+    header p {
       font-size: 1.05rem;
-      color: #e9d5ff;
+      color: #E9D5FF;
       max-width: 800px;
       margin: 0 auto;
-    }}
+    }
 
-    .brand-tag {{
-      position: absolute;
-      top: 20px;
-      left: 24px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: var(--orange-accent);
-      background: rgba(255, 255, 255, 0.15);
-      padding: 4px 12px;
-      border-radius: 12px;
-      letter-spacing: 1px;
-    }}
+    /* Track de Progreso */
+    .tracker-bar {
+      background: #F3ECE2;
+      padding: 10px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
 
-    .infographic-body {{
+    .tracker-dots {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #CBD5E1;
+      transition: background 0.3s ease;
+    }
+
+    .dot.active {
+      background: var(--orange-accent);
+      box-shadow: 0 0 0 3px rgba(224, 86, 56, 0.2);
+    }
+
+    /* Grid Layout */
+    .infographic-grid {
       display: grid;
-      grid-template-columns: 1fr 1.3fr 1fr;
-      grid-gap: 20px;
-      padding: 30px;
-      position: relative;
-    }}
+      grid-template-columns: 280px 1fr 280px;
+      gap: 20px;
+      padding: 28px;
+      align-items: center;
+    }
 
-    @media (max-width: 900px) {{
-      .infographic-body {{
+    @media (max-width: 950px) {
+      .infographic-grid {
         grid-template-columns: 1fr;
-      }}
-    }}
+      }
+    }
 
-    .column {{
+    .column {
       display: flex;
       flex-direction: column;
-      gap: 20px;
-    }}
+      gap: 24px;
+    }
 
-    .detail-card {{
-      background: #fff;
-      border: 2px solid #e5e0d8;
+    /* Tarjetas de Detalle */
+    .detail-card {
+      background: var(--card-bg);
+      border: 2px solid var(--border-color);
       border-radius: 12px;
       padding: 18px;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    }}
+    }
 
-    .detail-card:hover {{
+    .detail-card:hover {
       border-color: var(--orange-accent);
       transform: translateY(-2px);
       box-shadow: 0 6px 16px rgba(224, 86, 56, 0.12);
-    }}
+    }
 
-    .detail-card.active {{
+    .detail-card.active {
       border-color: var(--purple-main);
       background: var(--purple-light);
-      box-shadow: 0 6px 16px rgba(74, 21, 75, 0.15);
-    }}
+      box-shadow: 0 6px 18px rgba(74, 21, 75, 0.15);
+    }
 
-    .detail-card-header {{
+    .detail-card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 8px;
-    }}
+    }
 
-    .detail-title {{
+    .detail-title {
       font-weight: 700;
       color: var(--purple-main);
-      font-size: 1.05rem;
-      text-transform: uppercase;
+      font-size: 1rem;
       letter-spacing: 0.5px;
-    }}
+    }
 
-    .interactive-badge {{
+    .indicator-icon {
       font-size: 0.75rem;
       background: var(--orange-accent);
       color: white;
       padding: 2px 8px;
       border-radius: 10px;
       font-weight: 600;
-    }}
+    }
 
-    .detail-card p {{
-      font-size: 0.95rem;
+    .detail-card p {
+      font-size: 0.92rem;
       color: var(--text-dark);
-      line-height: 1.4;
-    }}
+      line-height: 1.45;
+    }
 
-    .canvas-container {{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      background: #faf6f0;
-      border-radius: 16px;
-      border: 1px dashed var(--border-color);
-      padding: 20px;
-      min-height: 380px;
-    }}
-
-    .image-wrapper {{
-      position: relative;
+    /* Contenedor del Lienzo Gráfico SVG */
+    .svg-container {
       width: 100%;
-      max-width: 360px;
-      display: inline-block;
-    }}
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #FAF6F0;
+      border-radius: 12px;
+      padding: 10px;
+      position: relative;
+    }
 
-    .symbol-img {{
+    svg {
       width: 100%;
       height: auto;
-      display: block;
-      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
-    }}
+      max-width: 460px;
+    }
 
-    .hotspot {{
-      position: absolute;
-      border-radius: 50%;
-      cursor: pointer;
-      border: 2px dashed transparent;
+    /* Efectos de Resaltado SVG */
+    .symbol-part {
       transition: all 0.3s ease;
-      background: rgba(224, 86, 56, 0.05);
-    }}
-
-    .hotspot:hover {{
-      border-color: var(--orange-accent);
-      background: rgba(224, 86, 56, 0.25);
-      box-shadow: 0 0 12px rgba(224, 86, 56, 0.5);
-    }}
-
-    .hotspot.highlighted {{
-      border-color: var(--purple-main);
-      background: rgba(74, 21, 75, 0.3);
-      box-shadow: 0 0 16px rgba(74, 21, 75, 0.7);
-    }}
-
-    #hs-linea-central {{ top: 0%; left: 45%; width: 10%; height: 85%; border-radius: 8px; }}
-    #hs-curvas-sup-izq {{ top: 25%; left: 0%; width: 45%; height: 50%; }}
-    #hs-curvas-sup-der {{ top: 25%; right: 0%; width: 45%; height: 50%; }}
-    #hs-curvas-inferiores {{ bottom: 5%; left: 28%; width: 44%; height: 35%; }}
-
-    .center-hint {{
-      margin-top: 15px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      text-align: center;
-      background: rgba(255,255,255,0.8);
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid var(--border-color);
-    }}
-
-    .info-popover {{
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(50, 13, 52, 0.95);
-      color: white;
-      padding: 16px 20px;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      max-width: 280px;
-      text-align: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      display: none;
-      z-index: 20;
-      backdrop-filter: blur(4px);
-      border: 1px solid var(--orange-accent);
-    }}
-
-    .info-popover.visible {{
-      display: block;
-    }}
-
-    .info-popover-close {{
-      position: absolute;
-      top: 6px;
-      right: 10px;
-      color: #aaa;
       cursor: pointer;
-      font-size: 1.1rem;
-      font-weight: bold;
-    }}
+    }
 
-    .remember-section {{
-      margin: 0 30px 20px 30px;
-      background: #fdf6ec;
-      border: 2px solid #f3d1a0;
+    .symbol-part:hover {
+      stroke: var(--orange-accent) !important;
+      filter: drop-shadow(0 0 4px rgba(224, 86, 56, 0.6));
+    }
+
+    .highlighted {
+      stroke: var(--orange-accent) !important;
+      stroke-width: 14px !important;
+      filter: drop-shadow(0 0 6px rgba(224, 86, 56, 0.8));
+    }
+
+    /* Popover para Explicaciones sobre el Símbolo */
+    .popover-info {
+      position: absolute;
+      bottom: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--purple-dark);
+      color: white;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      text-align: center;
+      width: 90%;
+      max-width: 380px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      border: 1px solid var(--orange-accent);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      z-index: 10;
+    }
+
+    .popover-info.visible {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Sección RECUERDA */
+    .remember-section {
+      margin: 0 28px 20px 28px;
+      background: #FDF6EC;
+      border: 2px solid #F3D1A0;
       border-radius: 12px;
       overflow: hidden;
-    }}
+    }
 
-    .remember-header {{
+    .remember-header {
       padding: 16px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      background: #fbf0e0;
+      background: #FBF0E0;
       user-select: none;
-    }}
+    }
 
-    .remember-title {{
+    .remember-title {
       display: flex;
       align-items: center;
       gap: 12px;
       font-weight: 700;
       color: var(--purple-main);
-      font-size: 1.1rem;
-    }}
+      font-size: 1.05rem;
+    }
 
-    .remember-icon {{
-      width: 28px;
-      height: 28px;
+    .remember-badge {
+      width: 26px;
+      height: 26px;
       background: var(--purple-main);
       color: white;
       border-radius: 50%;
@@ -297,73 +298,92 @@
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 0.9rem;
-    }}
+      font-size: 0.85rem;
+    }
 
-    .remember-content {{
+    .remember-content {
       padding: 0 20px;
       max-height: 0;
       overflow: hidden;
       transition: max-height 0.4s ease, padding 0.4s ease;
       font-size: 0.95rem;
       color: var(--text-dark);
-    }}
+    }
 
-    .remember-section.open .remember-content {{
-      padding: 16px 20px 20px 20px;
-      max-height: 200px;
-    }}
+    .remember-section.open .remember-content {
+      padding: 16px 20px;
+      max-height: 150px;
+    }
 
-    .closure-section {{
-      margin: 0 30px 30px 30px;
+    /* Cierre / Evaluación de Reflexión */
+    .closure-section {
+      margin: 0 28px 28px 28px;
       background: var(--purple-light);
       border: 2px solid var(--purple-accent);
       border-radius: 12px;
       padding: 24px;
       display: none;
-    }}
+      animation: fadeIn 0.4s ease;
+    }
 
-    .closure-section.active {{
+    .closure-section.active {
       display: block;
-    }}
+    }
 
-    .closure-title {{
+    .closure-title {
       font-weight: 700;
       color: var(--purple-main);
-      margin-bottom: 12px;
-      font-size: 1.15rem;
-    }}
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
 
-    .option-btn {{
+    .closure-question {
+      font-size: 0.98rem;
+      margin-bottom: 14px;
+      font-weight: 600;
+    }
+
+    .options-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .option-btn {
       background: white;
       border: 1px solid var(--border-color);
       padding: 12px 16px;
       border-radius: 8px;
       text-align: left;
       cursor: pointer;
-      font-size: 0.95rem;
-      margin-bottom: 8px;
-      width: 100%;
-    }}
+      font-size: 0.92rem;
+      transition: all 0.2s ease;
+    }
 
-    .option-btn.selected {{
+    .option-btn:hover {
+      border-color: var(--orange-accent);
+      background: #FFFEFB;
+    }
+
+    .option-btn.selected {
       border-color: var(--purple-main);
       background: var(--purple-main);
       color: white;
-    }}
+    }
 
-    .custom-response-area textarea {{
+    .textarea-area textarea {
       width: 100%;
-      height: 80px;
+      height: 70px;
       padding: 10px;
       border-radius: 8px;
       border: 1px solid var(--border-color);
       font-family: inherit;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       resize: vertical;
-    }}
+    }
 
-    .submit-btn {{
+    .submit-btn {
       margin-top: 12px;
       background: var(--orange-accent);
       color: white;
@@ -372,28 +392,28 @@
       border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-    }}
+      transition: background 0.2s ease;
+    }
 
-    .tracker {{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 10px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }}
+    .submit-btn:hover {
+      background: var(--orange-hover);
+    }
 
-    .tracker-dot {{
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #ddd;
-    }}
+    .feedback-box {
+      margin-top: 12px;
+      padding: 12px;
+      background: #E6F4EA;
+      border: 1px solid #34A853;
+      border-radius: 8px;
+      color: #137333;
+      font-size: 0.9rem;
+      display: none;
+    }
 
-    .tracker-dot.completed {{
-      background: var(--orange-accent);
-    }}
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -402,198 +422,278 @@
   <header>
     <div class="brand-tag">CIBERRAÍCES</div>
     <h1>OBSERVA DE CERCA</h1>
-    <p>Símbolo gráfico cultural Wayúu. Haz clic en las zonas o en los detalles interactivos para analizar cómo sus formas y líneas construyen un conjunto armónico.</p>
+    <p>Símbolo gráfico cultural Wayúu. Analiza la relación entre sus formas y líneas mediante los detalles interactivos.</p>
   </header>
 
-  <div class="tracker">
-    <span>Exploración de detalles:</span>
-    <div class="tracker-dot" id="dot-1" title="Detalle 1"></div>
-    <div class="tracker-dot" id="dot-2" title="Detalle 2"></div>
-    <div class="tracker-dot" id="dot-3" title="Detalle 3"></div>
-    <div class="tracker-dot" id="dot-4" title="Detalle 4"></div>
-    <span id="tracker-text">(0/4 explorados)</span>
+  <div class="tracker-bar">
+    <span>Progreso de exploración de detalles:</span>
+    <div class="tracker-dots">
+      <div class="dot" id="dot-1" title="Detalle 1"></div>
+      <div class="dot" id="dot-2" title="Detalle 2"></div>
+      <div class="dot" id="dot-3" title="Detalle 3"></div>
+      <div class="dot" id="dot-4" title="Detalle 4"></div>
+      <span id="tracker-count" style="font-weight: 600; margin-left: 6px;">0 / 4</span>
+    </div>
   </div>
 
-  <div class="infographic-body">
+  <div class="infographic-grid">
+    <!-- Columna Izquierda: Detalle 1 y 3 -->
     <div class="column">
-      <div class="detail-card" id="card-1" onclick="selectDetail(1)">
+      <div class="detail-card" id="card-1" onclick="triggerDetail(1)">
         <div class="detail-card-header">
           <span class="detail-title">DETALLE 1</span>
-          <span class="interactive-badge">👆 Haz clic</span>
+          <span class="indicator-icon">Explorar</span>
         </div>
         <p><strong>Curvas y espirales:</strong> Las curvas en espiral se repiten a ambos lados. Son formas orgánicas que aportan movimiento y equilibrio visual.</p>
       </div>
 
-      <div class="detail-card" id="card-3" onclick="selectDetail(3)">
+      <div class="detail-card" id="card-3" onclick="triggerDetail(3)">
         <div class="detail-card-header">
           <span class="detail-title">DETALLE 3</span>
-          <span class="interactive-badge">👆 Haz clic</span>
+          <span class="indicator-icon">Explorar</span>
         </div>
         <p><strong>Curvas inferiores:</strong> Las curvas inferiores se conectan con la línea central, generando simetría y estabilidad visual.</p>
       </div>
     </div>
 
-    <div class="canvas-container">
-      <div class="info-popover" id="popover">
-        <span class="info-popover-close" onclick="closePopover()">×</span>
-        <div id="popover-text">Símbolo Wayúu: Estructura geométrica y orgánica que conecta el eje vertical con formas dinámicas.</div>
-      </div>
+    <!-- Centro: Símbolo Wayúu y Lupas SVG Fieles al Gráfico Original -->
+    <div class="svg-container">
+      <div class="popover-info" id="popover">Pasa el cursor o haz clic sobre los componentes del símbolo.</div>
 
-      <div class="image-wrapper" onclick="onSymbolClick(event)">
-        <!-- La imagen aquí incluye los datos Base64 de tu archivo local -->
-        <img src="{base64_image}" alt="Símbolo gráfico cultural Wayúu" class="symbol-img">
+      <svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <style>
+            .symbol-line { fill: none; stroke: var(--red-symbol); stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; }
+            .lupa-bg { fill: #FFFFFF; stroke: var(--purple-main); stroke-width: 3; }
+            .guide-line { stroke: var(--purple-accent); stroke-width: 1.5; stroke-dasharray: 3,3; }
+          </style>
+        </defs>
 
-        <div class="hotspot" id="hs-linea-central" onmouseenter="hoverPart('Línea Central Vertical: Eje de simetría y estructura principal.')"></div>
-        <div class="hotspot" id="hs-curvas-sup-izq" onmouseenter="hoverPart('Espiral Superior Izquierda: Simetría bilateral en las curvas.')"></div>
-        <div class="hotspot" id="hs-curvas-sup-der" onmouseenter="hoverPart('Espiral Superior Derecha: Movimiento orgánico y fluidez.')"></div>
-        <div class="hotspot" id="hs-curvas-inferiores" onmouseenter="hoverPart('Curvas Inferiores: Anclaje y estabilidad a la base del diseño.')"></div>
-      </div>
+        <!-- LÍNEAS DE GUÍA A LUPAS -->
+        <line x1="170" y1="120" x2="110" y2="80" class="guide-line" />
+        <line x1="260" y1="110" x2="380" y2="60" class="guide-line" />
+        <line x1="230" y1="210" x2="160" y2="240" class="guide-line" />
+        <line x1="290" y1="210" x2="360" y2="240" class="guide-line" />
 
-      <div class="center-hint">💡 Pasa el cursor o haz clic en las zonas del símbolo central para explorar la relación entre formas y líneas.</div>
+        <!-- LUPAS DE DETALLE DE LA IMAGEN ORIGINAL -->
+        <!-- Lupa 1 (Superior Izquierda) -->
+        <g transform="translate(90, 80)">
+          <circle cx="0" cy="0" r="38" class="lupa-bg"/>
+          <path d="M-22,12 C-22,-18 -2,-18 -2,-2 C-2,10 -15,8 -15,0" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M12,12 C12,-18 -8,-18 -8,-2 C-8,10 5,8 5,0" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
+        </g>
+
+        <!-- Lupa 2 (Superior Derecha - Cruce) -->
+        <g transform="translate(380, 70)">
+          <circle cx="0" cy="0" r="38" class="lupa-bg"/>
+          <line x1="0" y1="-30" x2="0" y2="30" stroke="var(--red-symbol)" stroke-width="7"/>
+          <line x1="-30" y1="0" x2="30" y2="0" stroke="var(--red-symbol)" stroke-width="7"/>
+        </g>
+
+        <!-- Lupa 3 (Inferior Izquierda) -->
+        <g transform="translate(140, 240)">
+          <circle cx="0" cy="0" r="38" class="lupa-bg"/>
+          <line x1="0" y1="-30" x2="0" y2="10" stroke="var(--red-symbol)" stroke-width="7" stroke-linecap="round"/>
+          <path d="M0,10 C-18,10 -22,28 -8,28 C2,28 0,18 0,10" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M0,10 C18,10 22,28 8,28 C-2,28 0,18 0,10" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
+        </g>
+
+        <!-- Lupa 4 (Inferior Derecha) -->
+        <g transform="translate(360, 240)">
+          <circle cx="0" cy="0" r="38" class="lupa-bg"/>
+          <path d="M-20,10 C-20,-15 0,-15 0,0 C0,12 -12,10 -12,2" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
+          <path d="M10,10 C10,-15 -10,-15 -10,0 C-10,12 2,10 2,2" fill="none" stroke="var(--red-symbol)" stroke-width="6" stroke-linecap="round"/>
+        </g>
+
+        <!-- SÍMBOLO CENTRAL WAYÚU INTERACTIVO -->
+        <g id="symbol-group">
+          <!-- Detalle 2: Línea Central Vertical -->
+          <line id="part-linea-central" class="symbol-line symbol-part" x1="250" y1="60" x2="250" y2="220" 
+                onmouseenter="hoverPart('Línea Central Vertical: Eje de simetría y estructura principal de la composición.')" 
+                onclick="triggerDetail(2)"/>
+
+          <!-- Detalle 1: Curvas Espirales Superiores Izquierda y Derecha -->
+          <path id="part-curvas-sup-izq" class="symbol-line symbol-part" 
+                d="M250,110 L190,110 C150,110 130,140 150,170 C165,190 185,170 170,150 C160,140 145,150 150,160" 
+                onmouseenter="hoverPart('Espiral Izquierda: Aporta fluidez, dinamismo y equilibrio visual.')" 
+                onclick="triggerDetail(1)"/>
+
+          <path id="part-curvas-sup-der" class="symbol-line symbol-part" 
+                d="M250,110 L310,110 C350,110 370,140 350,170 C335,190 315,170 330,150 C340,140 355,150 350,160" 
+                onmouseenter="hoverPart('Espiral Derecha: Refleja en simetría bilateral el movimiento orgánico.')" 
+                onclick="triggerDetail(1)"/>
+
+          <!-- Detalle 3: Curvas Inferiores -->
+          <path id="part-curvas-inf" class="symbol-line symbol-part" 
+                d="M250,210 C220,210 200,245 220,250 C235,252 240,230 230,220 M250,210 C280,210 300,245 280,250 C265,252 260,230 270,220" 
+                onmouseenter="hoverPart('Curvas Inferiores: Anclaje y estabilidad visual conectadas al eje central.')" 
+                onclick="triggerDetail(3)"/>
+        </g>
+      </svg>
     </div>
 
+    <!-- Columna Derecha: Detalle 2 y 4 -->
     <div class="column">
-      <div class="detail-card" id="card-2" onclick="selectDetail(2)">
+      <div class="detail-card" id="card-2" onclick="triggerDetail(2)">
         <div class="detail-card-header">
           <span class="detail-title">DETALLE 2</span>
-          <span class="interactive-badge">👆 Haz clic</span>
+          <span class="indicator-icon">Explorar</span>
         </div>
         <p><strong>Línea central:</strong> La línea vertical central organiza el símbolo y le da dirección. Es una línea recta que estructura el conjunto.</p>
       </div>
 
-      <div class="detail-card" id="card-4" onclick="selectDetail(4)">
+      <div class="detail-card" id="card-4" onclick="triggerDetail(4)">
         <div class="detail-card-header">
           <span class="detail-title">DETALLE 4</span>
-          <span class="interactive-badge">👆 Haz clic</span>
+          <span class="indicator-icon">Explorar</span>
         </div>
         <p><strong>Relación entre formas:</strong> Las formas se combinan: líneas rectas y curvas trabajan juntas para crear un diseño armónico y equilibrado.</p>
       </div>
     </div>
   </div>
 
+  <!-- Sección RECUERDA -->
   <div class="remember-section" id="remember-box">
     <div class="remember-header" onclick="toggleRemember()">
       <div class="remember-title">
-        <div class="remember-icon">🔍</div>
+        <div class="remember-badge">🔍</div>
         <span>RECUERDA</span>
       </div>
-      <span>▼</span>
+      <span id="remember-arrow" style="font-size: 0.8rem; color: var(--purple-main);">▼</span>
     </div>
     <div class="remember-content">
-      <p>Las formas y las líneas no están allí por casualidad. Su combinación transmite ideas, expresa identidad y cuenta historias desde la cosmovisión y cultura Wayúu.</p>
+      <p>Las formas y las líneas no están allí por casualidad. Su combinación transmite ideas, expresa identidad y cuenta historias desde la cultura Wayúu.</p>
     </div>
   </div>
 
+  <!-- Interacción de Cierre (Pregunta de Reflexión) -->
   <div class="closure-section" id="closure-section">
-    <div class="closure-title">🎓 Reflexión Final: Integración Visual</div>
-    <p style="margin-bottom: 12px;">¿Qué relaciones encuentras entre las formas y las líneas del símbolo gráfico cultural Wayúu?</p>
+    <div class="closure-title">🎓 Reflexión Final sobre la Composición Visual</div>
+    <div class="closure-question">¿Qué relaciones encuentras entre las formas y las líneas del símbolo gráfico cultural Wayúu?</div>
 
-    <button class="option-btn" onclick="selectOption(this)">A. La línea recta vertical aporta firmeza y estructura, mientras las curvas generan movimiento y armonía en equilibrio.</button>
-    <button class="option-btn" onclick="selectOption(this)">B. Las curvas son independientes de la línea central y no influyen en el equilibrio visual del diseño.</button>
-    <button class="option-btn" onclick="selectOption(this)">C. La recta central divide el gráfico de forma asimétrica para resaltar solo el lado izquierdo.</button>
+    <div class="options-group">
+      <button class="option-btn" onclick="selectOption(this)">
+        A. La línea recta vertical proporciona estructura y dirección, mientras que las curvas generan equilibrio dinámico y simetría.
+      </button>
+      <button class="option-btn" onclick="selectOption(this)">
+        B. Las formas curvas funcionan de manera aislada sin relación organizativa con la recta central.
+      </button>
+      <button class="option-btn" onclick="selectOption(this)">
+        C. La línea vertical rompe la simetría visual de las espirales laterales.
+      </button>
+    </div>
 
-    <div class="custom-response-area" style="margin-top: 15px;">
-      <label style="font-size:0.9rem; font-weight:600; display:block; margin-bottom:6px;">Escribe una breve reflexión personal complementaria:</label>
-      <textarea id="student-text" placeholder="Escribe aquí tu análisis..."></textarea>
+    <div class="textarea-area">
+      <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 6px;">
+        Complementa con tu análisis personal (opcional):
+      </label>
+      <textarea placeholder="Escribe aquí tu reflexión sobre el equilibrio entre geometría y formas orgánicas..."></textarea>
     </div>
 
     <button class="submit-btn" onclick="submitReflection()">Enviar Reflexión</button>
-    <div id="feedback-msg" style="display:none; margin-top:12px; padding:12px; background:#e6f4ea; color:#137333; border-radius:8px;">✓ ¡Excelente análisis! Has identificado con éxito cómo el eje rígido y las formas fluidas interactúan para proyectar unidad visual e identidad cultural.</div>
+
+    <div class="feedback-box" id="feedback-box">
+      ✓ <strong>Análisis completado:</strong> Has identificado con precisión la interacción entre el eje recto estructural y el dinamismo de las formas orgánicas en el diseño Wayúu.
+    </div>
   </div>
 </div>
 
 <script>
-  const explored = {{ 1: false, 2: false, 3: false, 4: false }};
-  const allHotspots = ['hs-linea-central', 'hs-curvas-sup-izq', 'hs-curvas-sup-der', 'hs-curvas-inferiores'];
+  const explored = { 1: false, 2: false, 3: false, 4: false };
 
-  function clearHighlights() {{
-    allHotspots.forEach(id => {{
-      const el = document.getElementById(id);
-      if (el) el.classList.remove('highlighted');
-    }});
-  }}
+  const partsMap = {
+    1: ['part-curvas-sup-izq', 'part-curvas-sup-der'],
+    2: ['part-linea-central'],
+    3: ['part-curvas-inf'],
+    4: ['part-linea-central', 'part-curvas-sup-izq', 'part-curvas-sup-der', 'part-curvas-inf']
+  };
 
-  function highlightParts(ids) {{
-    clearHighlights();
-    ids.forEach(id => {{
-      const el = document.getElementById(id);
-      if (el) el.classList.add('highlighted');
-    }});
-  }}
+  function clearSVGHighlights() {
+    document.querySelectorAll('.symbol-part').forEach(el => {
+      el.classList.remove('highlighted');
+    });
+  }
 
-  function selectDetail(detailNum) {{
+  function triggerDetail(detailNum) {
     explored[detailNum] = true;
     updateTracker();
 
-    for (let i = 1; i <= 4; i++) {{
-      const card = document.getElementById(`card-${{i}}`);
-      if (card) {{
+    // Actualizar tarjetas en UI
+    for (let i = 1; i <= 4; i++) {
+      const card = document.getElementById(`card-${i}`);
+      if (card) {
         if (i === detailNum) card.classList.add('active');
         else card.classList.remove('active');
-      }}
-    }}
+      }
+    }
 
-    if (detailNum === 1) {{
-      highlightParts(['hs-curvas-sup-izq', 'hs-curvas-sup-der']);
-      showPopover("Detalle 1: Las curvas en espiral repetidas aportan movimiento y ritmo al diseño.");
-    }} else if (detailNum === 2) {{
-      highlightParts(['hs-linea-central']);
-      showPopover("Detalle 2: La línea recta vertical actúa como columna vertebral de toda la composición.");
-    }} else if (detailNum === 3) {{
-      highlightParts(['hs-curvas-inferiores']);
-      showPopover("Detalle 3: Las curvas inferiores anclan el símbolo a la base, proporcionando estabilidad.");
-    }} else if (detailNum === 4) {{
-      highlightParts(allHotspots);
-      showPopover("Detalle 4: Sinergia total. Las rectas y las curvas interactúan para crear un todo armónico.");
-    }}
-  }}
+    // Resaltar trazados SVG correspondientes
+    clearSVGHighlights();
+    const targetParts = partsMap[detailNum] || [];
+    targetParts.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('highlighted');
+    });
 
-  function hoverPart(text) {{
+    // Mostrar explicación emergente
+    const messages = {
+      1: "Detalle 1: Las espirales en repetición generan ritmo y equilibrio visual continuo.",
+      2: "Detalle 2: La línea vertical central actúa como el eje organizador de todo el gráfico.",
+      3: "Detalle 3: Las curvas inferiores anclan la figura aportando estabilidad en la base.",
+      4: "Detalle 4: Sinergia visual entre líneas rectas (estructura) y curvas (fluidez)."
+    };
+    showPopover(messages[detailNum]);
+  }
+
+  function hoverPart(text) {
     showPopover(text);
-  }}
+  }
 
-  function onSymbolClick(event) {{
-    showPopover("Relación de formas: La interacción de líneas rectas (estructura) y líneas curvas (dinamismo) sintetiza la cosmovisión Wayúu.");
-  }}
+  function showPopover(text) {
+    const pop = document.getElementById('popover');
+    pop.innerText = text;
+    pop.classList.add('visible');
+  }
 
-  function showPopover(text) {{
-    const popover = document.getElementById('popover');
-    const popText = document.getElementById('popover-text');
-    popText.innerText = text;
-    popover.classList.add('visible');
-  }}
+  function toggleRemember() {
+    const box = document.getElementById('remember-box');
+    const arrow = document.getElementById('remember-arrow');
+    box.classList.toggle('open');
+    arrow.innerText = box.classList.contains('open') ? '▲' : '▼';
+  }
 
-  function closePopover() {{
-    document.getElementById('popover').classList.remove('visible');
-  }}
-
-  function toggleRemember() {{
-    document.getElementById('remember-box').classList.toggle('open');
-  }}
-
-  function updateTracker() {{
+  function updateTracker() {
     let count = 0;
-    for (let i = 1; i <= 4; i++) {{
-      if (explored[i]) {{
+    for (let i = 1; i <= 4; i++) {
+      if (explored[i]) {
         count++;
-        document.getElementById(`dot-${{i}}`).classList.add('completed');
-      }}
-    }}
-    document.getElementById('tracker-text').innerText = `(${{count}}/4 explorados)`;
-    if (count === 4) {{
+        document.getElementById(`dot-${i}`).classList.add('active');
+      }
+    }
+    document.getElementById('tracker-count').innerText = `${count} / 4`;
+
+    if (count === 4) {
       document.getElementById('closure-section').classList.add('active');
-    }}
-  }}
+    }
+  }
 
-  function selectOption(btn) {{
-    document.querySelectorAll('.option-btn').forEach(opt => opt.classList.remove('selected'));
+  function selectOption(btn) {
+    document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
     btn.classList.add('selected');
-  }}
+  }
 
-  function submitReflection() {{
-    document.getElementById('feedback-msg').style.display = 'block';
-  }}
+  function submitReflection() {
+    document.getElementById('feedback-box').style.display = 'block';
+  }
 </script>
 
 </body>
 </html>
+"""
+
+# Guardar en archivo
+filename = "infografia_ciberraices_wayuu.html"
+with open(filename, "w", encoding="utf-8") as f:
+    f.write(html_code)
+
+print(f"Archivo de infografía generado exitosamente: {filename}")
